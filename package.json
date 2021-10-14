@@ -1,0 +1,42 @@
+{
+  "name": "smush-toolkit",
+  "version": "1.0.0",
+  "description": "A tool to check all images that might have issues with Smush. It tries to cover all known cases.",
+  "main": "src/index.js",
+  "dependencies": {
+    "@material-ui/core": "^4.11.3",
+    "@material-ui/icons": "^4.11.2",
+    "@wordpress/element": "^2.19.0"
+  },
+  "devDependencies": {
+    "@material-ui/lab": "^4.0.0-alpha.57",
+    "@wordpress/scripts": "^5.1.0",
+    "axios": "^0.21.1",
+    "css-loader": "^0.28.11",
+    "ignore-emit-webpack-plugin": "^2.0.6",
+    "mini-css-extract-plugin": "^1.3.4",
+    "node-sass": "^5.0.0",
+    "path": "^0.12.7",
+    "postcss-loader": "^4.2.0",
+    "postcss-preset-env": "^6.7.0",
+    "sass-loader": "^10.1.1"
+  },
+  "scripts": {
+    "build": "wp-scripts build",
+    "build:plugin-scripts": "npm run build:plugin-base-adminpages-scripts",
+    "build:plugin-base-adminpages-scripts": "wp-scripts build app/admin-pages/smush-toolkit/assets/scripts/main.js --output-path=assets/scripts/admin-pages/smush-toolkit",
+    "build:adminpages-regenerate-images-scripts": "wp-scripts build app/admin-pages/regenerate-image/assets-dev/scripts/main.js --output-path=assets/scripts/admin-pages/regenerate-image",
+    "check-engines": "wp-scripts check-engines",
+    "check-licenses": "wp-scripts check-licenses",
+    "lint:css": "wp-scripts lint-style",
+    "lint:js": "wp-scripts lint-js",
+    "lint:pkg-json": "wp-scripts lint-pkg-json",
+    "start": "wp-scripts start app/admin-pages/smush-toolkit/assets/scripts/main.js --output-path=assets/scripts/admin-pages/smush-toolkit",
+    "start:plugin-scripts": "wp-scripts start app/admin-pages/smush-toolkit/assets/scripts/main.js --output-path=assets/scripts/admin-pages/smush-toolkit",
+    "start:adminpages-regenerate-images-scripts": "wp-scripts start app/admin-pages/regenerate-image/assets-dev/scripts/main.js --output-path=assets/scripts/admin-pages/regenerate-image",
+    "test:e2e": "wp-scripts test-e2e",
+    "test:unit": "wp-scripts test-unit-js"
+  },
+  "author": "",
+  "license": "1 GNU V2+, MIT"
+}
