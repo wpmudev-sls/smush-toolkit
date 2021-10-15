@@ -30,6 +30,20 @@ class Controller extends Rest_Api {
 
 	private $site_image_sizes = array();
 
+	/**
+	 * Allowed mime types of image.
+	 *
+	 * @var array $mime_types
+	 */
+	public static $mime_types = array(
+		'image/jpg',
+		'image/jpeg',
+		'image/x-citrix-jpeg',
+		'image/gif',
+		'image/png',
+		'image/x-png',
+	);
+
 	public function init() {
 		$endpoint = array(
 			'namespace' => 'smush_toolkit',
@@ -122,8 +136,13 @@ class Controller extends Rest_Api {
 			return false;
 		}
 
-		$attachment_id    = $this->get_attachment();
-		$image_analyzer   = new Analyze_Image( (int)$attachment_id );
+		$attachment_id = $this->get_attachment();
+
+		if ( ! $attachment_id || empty( $attachment_id ) ) {
+			return false;
+		}
+
+		$image_analyzer   = new Analyze_Image( (int) $attachment_id );
 		$analysis_results = $image_analyzer->analyze();
 
 		return ( ! isset( $analysis_results['report_status'] ) || ! $analysis_results['report_status'] ) ? false : $analysis_results;
@@ -144,7 +163,7 @@ class Controller extends Rest_Api {
 			return false;
 		}
 
-		$image_id = null; 
+		$image_id = null;
 		$offset   = (int) $progress['offset'];
 
 		/**
@@ -164,7 +183,7 @@ class Controller extends Rest_Api {
 		if ( is_null( $image_id ) ) {
 			global $wpdb;
 
-			$mimes = implode( "', '", \WP_Smush::get_instance()->core()::$mime_types );
+			$mimes = implode( "', '", self::$mime_types );
 			$image = $wpdb->get_col(
 				$wpdb->prepare(
 					"SELECT ID FROM {$wpdb->posts} WHERE post_type = 'attachment' AND post_mime_type IN ('$mimes') LIMIT 1 OFFSET %d",
@@ -172,17 +191,13 @@ class Controller extends Rest_Api {
 				)
 			);
 
-			if ( empty( $image ) ) {
+			if ( empty( $image ) || in_array( 0, array_values( $image ) ) ) {
 				return false;
 			}
 
 			$image_id = (int) $image[0];
 		}
-
-		/*return array(
-			'image_id' => $image_id,
-			'meta'     => \get_post_meta( $image_id, '_wp_attachment_metadata', true ),
-		);*/
+		
 		return $image_id;
 	}
 

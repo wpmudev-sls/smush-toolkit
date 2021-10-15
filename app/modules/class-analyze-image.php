@@ -62,6 +62,13 @@ class Analyze_Image {
 				'suggestion' => __( 'You can try regenerating thumbnails', 'shush-toolkit' ),
 				'value'      => array( $this, 'check_missing_files' ),
 			),
+
+			'missing_file_meta'   => array(
+				'title'      => __( 'Missing file meta', 'shush-toolkit' ),
+				'issue'      => __( 'The "file" key is missing from _wp_attachment_metadata', 'shush-toolkit' ),
+				'suggestion' => __( 'You can try regenerating thumbnails', 'shush-toolkit' ),
+				'value'      => array( $this, 'check_missing_file_meta' ),
+			),
 		);
 	}
 
@@ -82,8 +89,21 @@ class Analyze_Image {
 	}
 
 	public function analyze() {
-		if ( is_null( $this->image_id ) || empty( $this->meta ) ) {
+		if ( is_null( $this->image_id ) ) {
+		//if ( is_null( $this->image_id ) || empty( $this->meta ) ) {
 			return false;
+		}
+
+		if ( ! is_array( $this->meta ) || empty( $this->meta ) ) {
+			$this->report_status                      = 'invalid';
+			$this->report[ 'no_meta' ]                = __( 'Image has no meta data', 'shush-toolkit' );
+			$this->report['suggestions'][ 'no_meta' ] = array(
+				'title'      => __( 'No meta data', 'shush-toolkit' ),
+				'issue'      => __( 'Image has no meta data', 'shush-toolkit' ),
+				'suggestion' => __( 'Image has no meta data', 'shush-toolkit' ),
+			);
+
+			return $this->get_report();
 		}
 
 		foreach ( $this->get_cases() as $case_key => $case ) {
@@ -234,6 +254,10 @@ class Analyze_Image {
 		return empty( $missing_files ) ? null : $missing_files;
 	}
 
+	protected function check_missing_file_meta() {
+		$missing_file_meta = array();
+		return ( ! is_array( $this->meta ) || empty( $this->meta ) || ! isset( $this->meta['file'] ) ) ? __( 'Missing file', 'shush-toolkit' ) : null;
+	}
 
 	public function get_report() {
 		$this->report['report_status'] = $this->report_status;
