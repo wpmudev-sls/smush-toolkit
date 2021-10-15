@@ -148,7 +148,6 @@ class ListImages extends React.Component {
 	display_suggestions( meta ) {
 		let suggestions = meta.suggestions;
 		return  Object.keys(suggestions).map((item,index) => {
-
 			return(
 				<Accordion>
 					<AccordionSummary
@@ -164,14 +163,14 @@ class ListImages extends React.Component {
 
 								<List component="nav" aria-label="main mailbox folders">
 
-									{meta[item].length > 0 ?
-									meta[item].map((meta_item)=>(
+									{meta['suggestions'][item].length > 0 ?
+									meta['suggestions'][item].map((meta_item)=>(
 										<ListItem>
 											{meta_item}
 									  	</ListItem>
 									))
 									:
-									'Empty'}
+									''}
 									
 								</List>
 
